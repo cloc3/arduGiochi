@@ -13,7 +13,7 @@ void loop() {
         static char str[40];
         if (attendiStringaNumerica(numeroCicliRichiesti,corsoLettura)) {
                 if (! *corsoLettura) {
-                        sprintf(str,"intero = %d\n",*numeroCicliRichiesti);
+                        sprintf(str,"intero = %u\n",*numeroCicliRichiesti);
                         Serial.print(str);
                         *numeroCicliRichiesti=0;
                 }
