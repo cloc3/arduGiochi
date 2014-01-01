@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-int _numeroCicliRichiesti;
+int _numeroCicliRichiesti=0;
 int *numeroCicliRichiesti=&_numeroCicliRichiesti;
 
 boolean _corsoLettura=false;
