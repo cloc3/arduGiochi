@@ -1,8 +1,10 @@
 #include <Arduino.h>
 
-int _intero;
-int *intero=&_intero;
+int _numeroCicliRichiesti;
+int *numeroCicliRichiesti=&_numeroCicliRichiesti;
+
 boolean _corsoLettura=false;
 boolean *corsoLettura=&_corsoLettura;
-boolean attendiStringa(int *,boolean *);
+
+boolean attendiStringaNumerica(int *,boolean *);
 boolean digit2int(int *,int *);

@@ -10,12 +10,12 @@ void setup() {
 }
 
 void loop() {
-	static char str[40];
-	if (attendiStringa(intero,corsoLettura)) {
-		if (! *corsoLettura) {
-			sprintf(str,"intero = %d\n",*intero);
-			Serial.print(str);
-			*intero=0;
-		}
-	}
+        static char str[40];
+        if (attendiStringaNumerica(numeroCicliRichiesti,corsoLettura)) {
+                if (! *corsoLettura) {
+                        sprintf(str,"intero = %d\n",*numeroCicliRichiesti);
+                        Serial.print(str);
+                        *numeroCicliRichiesti=0;
+                }
+        }
 }
