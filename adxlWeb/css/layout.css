@@ -11,7 +11,7 @@ html,body {overflow:hidden}
 	top:54px;
 	left:0px;
 	right:0px;
-	bottom:0px;
+	bottom:60px;
 	z-index:0;
 	/*border:solid 1px blue;*/
 }
@@ -26,24 +26,14 @@ canvas {
 	top:0;
 	height:auto;
 }
-html>body #areaDiLavoro{
-	height: 100%;
-	top: 0px;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	/*border:solid 1px #bbb111;*/
-	z-index:1;
-	overflow:scroll
-}
 
 html>body #areaDiLavoro{
 	position: static;
 	top:25px;
-	bottom:20px;
 	padding:0;
-	height:auto;
-	height: 100%;
+	height:90%;
+	z-index:1;
+	overflow:auto;
 }
 
 #header{
@@ -65,32 +55,20 @@ html>body #areaDiLavoro{
 }
 
 #asseX {
-	/*position: absolute;*/
-	/*top:35px;*/
-	margin-top:35px;
-	/*border: solid 1px #333888;*/
+	margin-top:30px;
 	left: 80px;
 	z-index: 2;
 }
 
 #asseY{
-	/*position: absolute;*/
-	//position: relative;
-	/*top:35px;*/
-	margin-top:35px;
-	right: 18%;
-	left: 18%;
+	margin-top:30px;
 	z-index:1;
 	overflow:auto;
 	z-index:4;
 }
 
 #asseZ {
-	/*position: absolute;*/
-	//position: relative;
-	/*top:35px;*/
-	/*border: solid 1px #333888;*/
-	margin-top:35px;
+	margin-top:30px;
 	right: 80px;
 	z-index: 2;
 }
