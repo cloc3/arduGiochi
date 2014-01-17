@@ -9,7 +9,8 @@
   <title>adxl345</title>
 	<script type="application/javascript">
 	function avvio() {
-		gestioneGrafici(50000);
+		var velox = 50000;
+		gestioneGrafici(velox);
 	}
 	</script>
 </head>
@@ -24,16 +25,15 @@
 	<nav id="menu"></nav>
 	<div id="areaDiLavoro" style="display:block">
 		<div id="asseX">asse X
-			<canvas id="graficoX" width="600px" height="100px">
-			</canvas>
+			<canvas id="graficoX" width="600px" height="100px" />
 		</div>
 
 		<div id="asseY">asse Y
-			<canvas id="graficoY" width="600px" height="100px"></canvas>
+			<canvas id="graficoY" width="600px" height="100px" />
 		</div>
 
 		<div id="asseZ">asse Z
-			<canvas id="graficoZ" width="600px" height="100px"></canvas>
+			<canvas id="graficoZ" width="600px" height="100px" />
 		</div>
 		<div id="test"></div>
 	</div>
