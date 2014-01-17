@@ -7,7 +7,6 @@ var ajax_req = null;
 function ajaxOk(ajax_req) {
     if (ajax_req.readyState == 4 && ajax_req.status == 200) {
         return ajax_req.responseText;
-        //return ajax_req.responseType;
     } else {
         return false;
     }

@@ -1,5 +1,7 @@
 #include <Arduino.h>
 
+// analizza il singolo carattere in ingresso, integra il numero di cicli o,
+// se del caso, restituisce uno stato di errore
 boolean digit2int( int *cifra, int *numeroCicliRichiesti ) {
 	if ((*cifra >= '0') && (*cifra <= '9')) {
 		*numeroCicliRichiesti = (*numeroCicliRichiesti)*10 + *cifra -'0';
@@ -9,6 +11,8 @@ boolean digit2int( int *cifra, int *numeroCicliRichiesti ) {
 	return true;
 }
 
+// acquisisce e controlla il flusso in input dalla porta seriale
+// per passare i singoli caratteri a digit2int
 boolean attendiStringaNumerica(int *numeroCicliRichiesti, boolean *corsoLettura) {
 	static boolean inizioLettura,datoValido;
 	static int *cifra;

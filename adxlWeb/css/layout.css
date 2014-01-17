@@ -1,10 +1,5 @@
-* {
-	margin: 0;
-	padding: 0;
-	border: none;
-	text-align: center;
-}
 html,body {overflow:hidden}
+
 #container{
 	position: absolute;
 	width:100%;
@@ -71,22 +66,4 @@ html>body #areaDiLavoro{
 	margin-top:30px;
 	right: 80px;
 	z-index: 2;
-}
-
-html>body #colonnaSx, html>body #colonnaDx{
-	height: auto;
-	top: 80px;
-	bottom: 60px;
-	overflow: auto;
-}
-
-/*trucchi per aumentare lo spazio, non ancora utilizzati*/
-.distanziale1{
-	width: 100%;
-	height: 80px;
-}
-
-.distanziale2{
-	width:100%;
-	height:60px;
 }
