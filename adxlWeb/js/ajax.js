@@ -6,7 +6,8 @@ var ajax_req = null;
 
 function ajaxOk(ajax_req) {
     if (ajax_req.readyState == 4 && ajax_req.status == 200) {
-        return ajax_req.responseText;
+    		console.log(ajax_req.getAllResponseHeaders());
+				return ajax_req.responseText;
     } else {
         return false;
     }
