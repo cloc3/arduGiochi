@@ -1,3 +1,8 @@
+/*
+	versione alternativa del programma
+	http://arduino.cc/en/Tutorial/Fade
+*/
+
 #define LUCCIOLA 9 //Il canale 9 può operare in modalità pwm
 
 int bit=5;    //incremento ciclico
