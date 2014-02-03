@@ -73,7 +73,7 @@ void loop()
 				y = (((int)buff[3]) << 8) | buff[2];
 				z = (((int)buff[5]) << 8) | buff[4];
 
-				delay(5); // il ritardo consigliato da blogspot per il ripristino della comunicazione i2c è 15 millisecondi
+				delay(1); // il ritardo consigliato da blogspot per il ripristino della comunicazione i2c è 15 millisecondi
 									// la lettura delle specifiche lascia pensare che la comunicazione i2C sia molto più rapida:
 									// dai 100 ai 400 KHz
 									// ad occhio, con 5 millisecondo la risposta sembra ottima. Da studiare.
