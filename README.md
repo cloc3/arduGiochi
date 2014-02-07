@@ -11,25 +11,37 @@ http://www.cloc3.net/dokuwiki/doku.php/progettoSisifo
 
 ----
 
-In questo branch sono contenuti:
+Contenuti del branch:
 
- - Il file ADXL345.pdf # contiene le specifiche dell'accelerometro adxl345.
- - La cartella sketchAdxl345 # contiene tre sketch per arduino applicabili 
- 
-ketchartella ./accelerometro :DXL345.pdf
+ - file ADXL345.pdf # contiene le specifiche dell'accelerometro adxl345.
+ - cartella sketchAdxl345 # contiene tre sketch per arduino applicabili.
+ - cartella librerie # contiene le librerie degli sketch. 
+ - cartella adxlWeb # contiene:
+		a) ncWebService.sh: servizio, basato su netcat6, per redirigere il flusso di arduino verso una connessione ip/tcp.
+		b) file index.html + cartelle di contorno: applicazione web per visualizzare un monitor dell'accelerometro
+ - Le rimanenti cartelle sono di servizio: da rimuovere.
 
-Contiene due sketch.
-Lo sketch accelerometro.adafruit è il programma di test distribuito da Adafruit.
+----
 
-Lo scketch arduGiochi è un programma che permette di ottenere una successione finita di letture
-dell'accelerometro ADXL345.
+Informazioni sula cartella sketchAdxl345:
 
-Si utilizza da terminale con:
-$ n = 4 # numero di letture desiderate
-$ head -n $n /dev/arduino &
-$ echo 4 >/dev/arduino
+ - sketchAdafruit # https://github.com/adafruit/Adafruit\_ADXL345
+ - sketchGuida #  http://codeyoung.blogspot.it/2009/11/adxl345-accelerometer-breakout-board.html
+ - sketchArduGiochi # sketch per l'applicazione monitor
+ - sketchArduGiochi.ino # collegamento con funzioni di wrapper (selettore).
+ - SConstruct # collegamento allo script arscons (https://github.com/suapapa/arscons) per la compilazione.
 
-Il formato generato dallo sketch arduGiochi è:
+----
+
+Come usare lo sketchArduGiochi:
+
+$ cd sketchAdxl345
+$ ln -sf sketchArduGiochi sketchAdxl345.ino # prepara il collegamento
+$ scons upload
+$ exec 5<>/dev/arduino #> rende disponibile la porta /dev/arduino in lettura e scrittura
+$ head -n 80 </dev/arduino& echo -n 80 >/dev/arduino # stampa 80 letture consecutive dell'accelerometro.
+
+Il formato dei dati prodotti dallo sketchArduGiochi è:
 
 time x y z
 
@@ -51,7 +63,7 @@ Rispetta lo standard html5, scambia dati con la tecnica ajax (script js/ajax.js)
 
 Per utilizzare il monitor, è sufficiente lanciare l'applicazione web, quando:
  - arduino è collegato attraverso la porta seriale alla macchina che gestisce il servizio web;
- - lo sketch arduGiochi.ino è caricato e attivo (lanciare ad esempio scons upload);
+ - lo sketch sketchArduGiochi.ino è caricato e attivo (lanciare ad esempio scons upload);
  - il servizio ncWebServer.sh è attivo.
 
 Il file adxlWeb/adxl345.mp4 contiene un video dimostrativo.
