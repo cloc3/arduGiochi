@@ -1,8 +1,22 @@
-arduGiochi
+accelerometro
 ==========
 
 ----
-cartella ./accelerometro :
+Questo branch contiene il software relativo alla sperimentazione didattica in tema di sismologia del Liceo Paschini,
+in collaborazione con il Centro di Ricerche Sismologiche di Udine (http://www.crs.inogs.it), che è una sezione staccata
+dell'OGS - Istituto Nazionale di Oceanografia e di Geofisica Sperimentale (http://www.inogs.it).
+
+L'unità didattica associata a questa sperimentazione è documentata all'indirizzo internet seguente:
+http://www.cloc3.net/dokuwiki/doku.php/progettoSisifo
+
+----
+
+In questo branch sono contenuti:
+
+ - Il file ADXL345.pdf # contiene le specifiche dell'accelerometro adxl345.
+ - La cartella sketchAdxl345 # contiene tre sketch per arduino applicabili 
+ 
+ketchartella ./accelerometro :DXL345.pdf
 
 Contiene due sketch.
 Lo sketch accelerometro.adafruit è il programma di test distribuito da Adafruit.
