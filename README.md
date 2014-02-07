@@ -39,7 +39,7 @@ $ cd sketchAdxl345
 $ ln -sf sketchArduGiochi sketchAdxl345.ino # prepara il collegamento
 $ scons upload
 $ exec 5<>/dev/arduino #> rende disponibile la porta /dev/arduino in lettura e scrittura
-$ head -n 80 </dev/arduino& echo -n 80 >/dev/arduino # stampa 80 letture consecutive dell'accelerometro.
+$ head -n 80 </dev/arduino & echo -n 80 >/dev/arduino # stampa 80 letture consecutive dell'accelerometro.
 
 Il formato dei dati prodotti dallo sketchArduGiochi è:
 
