@@ -8,8 +8,9 @@
 #include <letturaIntero.h>
 #include <Wire.h>
 
-#define DEVICE (0x53)		// indirizzo fisico che identifica l'accelerometro
-												// nella configurazione predisposta per scambiare dati con il protocollo i2c
+#define DEVICE (0x53)		// indirizzo fisico per l'accelerometro in modalità i2c, con SDO=0
+//#define DEVICE (0x1D)		// indirizzo fisico per l'accelerometro in modalità i2c, con SDO=1
+
 #define TO_READ (6)			// dimensione del registro che contiene i dati (due bytes per ciascun asse) dell'accelerometro
 
 byte buff[TO_READ] ;		// preparazione della memoria per ospitare la lettura dei dati
