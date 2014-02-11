@@ -51,6 +51,7 @@ void setup()
 	writeTo(DEVICE, 0x31, 0);				// questa configurazione seleziona il range +/-2g. impostare 8 per ottenere la massima risoluzione 4mg/LSB (da capire meglio)
 	//writeTo(DEVICE, 0x31, 8);			// questa configurazione seleziona il range +/-2g. impostare 8 per ottenere la massima risoluzione 4mg/LSB (da capire meglio)
 	writeTo(DEVICE, 0x2D, 8);
+	//writeTo(DEVICE, 0x2C, 0xB);			//DATA RATE a 200Hz
 }
 
 void loop()
@@ -73,11 +74,8 @@ void loop()
 				y = (((int)buff[3]) << 8) | buff[2];
 				z = (((int)buff[5]) << 8) | buff[4];
 
-				delay(1); // il ritardo consigliato da blogspot per il ripristino della comunicazione i2c è 15 millisecondi
-									// la lettura delle specifiche lascia pensare che la comunicazione i2C sia molto più rapida:
-									// dai 100 ai 400 KHz
-									// ad occhio, con 5 millisecondo la risposta sembra ottima. Da studiare.
-									// inoltre, tale velocità può essere abbassata ulteriormente implementando la comunicazione seriale SPI
+				delay(8); // il ritardo consigliato da blogspot per il ripristino della comunicazione i2c è 15 millisecondi
+									// il data rate può modificato usando il registro 0x2C 
 				sprintf(str, "%lu %d %d %d\n",time, x, y, z);
 				Serial.print(str);
 			}
