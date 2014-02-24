@@ -109,7 +109,7 @@ void displayRange(void)
 
 void setup(void) 
 {
-  Serial.begin(112500);
+  Serial.begin(115200);
   Serial.println("Accelerometer Test"); Serial.println("");
   
   /* Initialise the sensor */
