@@ -47,7 +47,6 @@ void loop()
 	Serial.println(freq);
 
 	// definizione della frequenza di lampeggiamento
-	lampeggio = ciclo / freq;
 	if ( freq < MINFREQ) {							// filtro per alta illuminazione
 		lampeggio=ciclo; 
 	} else if (freq > MAXFREQ ) {				// filtro per bassa illuminazione
