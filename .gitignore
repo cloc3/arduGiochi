@@ -1,10 +1,6 @@
 # file da non ignorare anche se nascosto (dot-file).
 !.gitignore
 
-#cartelle inutili
-letturaIntero
-seriale
-
 #file prodotti da scons
 *.hex
 *.elf
