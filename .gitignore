@@ -4,3 +4,9 @@
 #cartelle inutili
 letturaIntero
 seriale
+
+#file prodotti da scons
+*.hex
+*.elf
+build
+.sconsign.dblite
