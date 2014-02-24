@@ -1,4 +1,5 @@
 arduGiochi
 ==========
 
-giochi infantili con arduino
+sketch dimostrativo per l'effetto fade.
+vedi anche http://arduino.cc/en/Tutorial/Fade
