@@ -1,5 +1,8 @@
-accelerometro
+wiildos
 ==========
+
+La versione di wiildos utilizzata a scuola richiede alcuni accorgimenti particolari, leggermete diversi da quelli testati su gentoo.
+In attesa di comprendere meglio il fenomeno, questo branch mantiene una versione del branch accelerometro adatta alla chiavetta wiildos.
 
 ----
 Questo branch contiene il software relativo alla sperimentazione didattica in tema di sismologia del Liceo Paschini,

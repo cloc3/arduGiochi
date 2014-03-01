@@ -75,8 +75,7 @@ void loop()
 				y = (((int)buff[3]) << 8) | buff[2];
 				z = (((int)buff[5]) << 8) | buff[4];
 
-				delay(8); // il ritardo consigliato da blogspot per il ripristino della comunicazione i2c è 15 millisecondi
-									// il data rate può modificato usando il registro 0x2C 
+				delay(25); // la chievetta usb manifesta problemi a funzionare con delay troppo ridotti. 
 				sprintf(str, "%lu %d %d %d\n",time, x, y, z);
 				Serial.print(str);
 			}
