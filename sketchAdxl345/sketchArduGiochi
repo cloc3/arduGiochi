@@ -8,13 +8,13 @@
 #include <letturaIntero.h>
 #include <Wire.h>
 
-#define DEVICE (0x53)		// indirizzo fisico per l'accelerometro in modalità i2c, con SDO=0
-//#define DEVICE (0x1D)		// indirizzo fisico per l'accelerometro in modalità i2c, con SDO=1
+//#define DEVICE (0x53)		// indirizzo fisico per l'accelerometro in modalità i2c, con SDO=0
+#define DEVICE (0x1D)		// indirizzo fisico per l'accelerometro in modalità i2c, con SDO=1
 
-#define TO_READ (6)			// dimensione del registro che contiene i dati (due bytes per ciascun asse) dell'accelerometro
+#define TO_READ (6)			// lunghezza in byte dello spazio dati (due byte per ciascun asse)
 
-byte buff[TO_READ] ;		// preparazione della memoria per ospitare la lettura dei dati
-char str[512];					// preparazione di una stringa per comunicare la lettura sulla porta seriale
+byte buff[TO_READ] ;		// preparazione dello spazio di memoria dedicato all'acquisizione dei dati
+char str[512];					// stringa destinata alla rappresentazione dei dati in formato carattere
 
 void writeTo(int device, byte address, byte val) {
 	Wire.beginTransmission(device);	// avvio della comunicazione i2c, tra l'accelerometro e arduino
@@ -55,16 +55,12 @@ void setup()
 	//writeTo(DEVICE, 0x2C, 0xB);			//DATA RATE a 200Hz
 }
 
-void loop()
+char *misura()
 {
 	int regAddress = 0x32;					// indirizzo fisico del primo registro dati sull'accelerometro ADXL345
-	int i, x, y, z;
+	int x, y, z;
 	unsigned long time;
 
-	if (attendiStringaNumerica(numeroCicliRichiesti,corsoLettura)) { // attende una richiesta di acquisizione
-		if (! *corsoLettura) {
-			for (int count=0;count<*numeroCicliRichiesti;count++) {
-				str[0]='\0';
 				time=micros();																// tempo dall'accensione di arduino, in microsecondi
 	 			readFrom(DEVICE, regAddress, TO_READ, buff);	// lettura del campo dati sull'accelerometro ADXL345
 				// per ciascun asse sono riservati 10 bit di precisione (più il segno?). Il primo byte contiene le cifre più significative
@@ -78,9 +74,17 @@ void loop()
 				delay(8); // il ritardo consigliato da blogspot per il ripristino della comunicazione i2c è 15 millisecondi
 									// il data rate può modificato usando il registro 0x2C 
 				sprintf(str, "%lu %d %d %d\n",time, x, y, z);
-				Serial.print(str);
-			}
-		*numeroCicliRichiesti=0;
+				return str;
+}
+
+void loop()
+{
+
+	if (attendiStringaNumerica(numeroCicliRichiesti,corsoLettura)) { // attende una richiesta di acquisizione
+		if (! *corsoLettura) {
+			for (int count=0;count<*numeroCicliRichiesti;count++)
+				Serial.print(misura());
+			*numeroCicliRichiesti=0;
 		}
 	}
 }
