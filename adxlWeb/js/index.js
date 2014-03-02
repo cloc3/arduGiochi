@@ -34,15 +34,38 @@ function graph(content,tempoFinale,velox) {
 	cty.clearRect(0,0,cty.canvas.width,cty.canvas.height);
 	ctz.clearRect(0,0,ctz.canvas.width,ctz.canvas.height);
 
+	ctx.strokeStyle="red";
+	cty.strokeStyle="red";
+	ctz.strokeStyle="red";
+
 	ctx.beginPath();
 	cty.beginPath();
 	ctz.beginPath();
 	for (var i=0;i<eventi.length;i++) {
 		var coord = eventi[i].split(" ");
-		if (coord.length==4) {
+		if (coord.length==7) {
    		ctx.lineTo((tempoFinale - coord[0])/velox,50+Number(coord[1]));
    		cty.lineTo((tempoFinale - coord[0])/velox,50+Number(coord[2]));
    		ctz.lineTo((tempoFinale - coord[0])/velox,-245+50+Number(coord[3]));
+		}
+	}
+	ctx.stroke();
+	cty.stroke();
+	ctz.stroke();
+
+	ctx.strokeStyle="#8ac007";
+	cty.strokeStyle="#8ac007";
+	ctz.strokeStyle="#8ac007";
+
+	ctx.beginPath();
+	cty.beginPath();
+	ctz.beginPath();
+	for (var i=0;i<eventi.length;i++) {
+		var coord = eventi[i].split(" ");
+		if (coord.length==7) {
+   		ctx.lineTo((tempoFinale - coord[0])/velox,50+Number(coord[4]));
+   		cty.lineTo((tempoFinale - coord[0])/velox,50+Number(coord[5]));
+   		ctz.lineTo((tempoFinale - coord[0])/velox,-245+50+Number(coord[6]));
 		}
 	}
 	ctx.stroke();

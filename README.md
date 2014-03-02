@@ -1,5 +1,9 @@
-accelerometro
+dueAccelerometri
 ==========
+
+----
+Branch in fase di ampliamento.
+Contiene l'adattamento del branch "accelerometro" all'utilizzo simultaneo di due accelerometri.
 
 ----
 Questo branch contiene il software relativo alla sperimentazione didattica in tema di sismologia del Liceo Paschini,

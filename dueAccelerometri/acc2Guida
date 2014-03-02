@@ -1,0 +1,88 @@
+/*
+	riferimento:
+	http://codeyoung.blogspot.it/2009/11/adxl345-accelerometer-breakout-board.html
+*/
+
+#include <Wire.h>
+
+#define DEVICE0 (0x53)	// indirizzo fisico per l'accelerometro in modalità i2c, con SDO=0
+#define DEVICE1 (0x1D)	// indirizzo fisico per l'accelerometro in modalità i2c, con SDO=0
+
+#define TO_READ (6)			// lunghezza in byte dello spazio dati (due byte per ciascun asse)
+byte buff[TO_READ] ;    // preparazione dello spazio di memoria dedicato all'acquisizione dei dati
+char str[512];					// stringa destinata alla rappresentazione dei dati in formato carattere
+
+//---------------- Functions
+//Writes val to address register on device
+void writeTo(int device, byte address, byte val) {
+	Wire.beginTransmission(device);	//start transmission to device 
+	Wire.write(address);							// send register address
+	Wire.write(val);									// send value to write
+	Wire.endTransmission();					//end transmission
+}
+
+//reads num bytes starting from address register on device in to buff array
+void readFrom(int device, byte address, int num, byte buff[]) {
+	Wire.beginTransmission(device);	//start transmission to device 
+	Wire.write(address);						//sends address to read from
+	Wire.endTransmission();					//end transmission
+
+	Wire.beginTransmission(device);	//start transmission to device
+	Wire.requestFrom(device, num);	// request 6 bytes from device
+
+	int i = 0;
+	while(Wire.available())					//device may send less than requested (abnormal)
+  { 
+		buff[i] = Wire.read();				// receive a byte
+		i++;
+	}
+	Wire.endTransmission();					//end transmission
+}
+
+void setup()
+{
+	Wire.begin();										// join i2c bus (address optional for master)
+	Serial.begin(115200);						// start serial for output
+
+	//Turning on the ADXL345
+	writeTo(DEVICE0, 0x2D, 0);      
+	writeTo(DEVICE0, 0x2D, 16);
+	writeTo(DEVICE0, 0x2D, 8);
+	writeTo(DEVICE1, 0x2D, 0);      
+	writeTo(DEVICE1, 0x2D, 16);
+	writeTo(DEVICE1, 0x2D, 8);
+}
+
+char *misura()
+{
+	int regAddress = 0x32;					//first axis-acceleration-data register on the ADXL345
+  int x0, y0, z0, x1, y1, z1;
+  
+	readFrom(DEVICE0, regAddress, TO_READ, buff); //read the acceleration data from the ADXL345
+  
+  //each axis reading comes in 10 bit resolution, ie 2 bytes.  Least Significat Byte first!!
+  //thus we are converting both bytes in to one int
+  x0 = (((int)buff[1]) << 8) | buff[0];   
+  y0 = (((int)buff[3])<< 8) | buff[2];
+  z0 = (((int)buff[5]) << 8) | buff[4];
+
+	readFrom(DEVICE1, regAddress, TO_READ, buff); //read the acceleration data from the ADXL345
+  
+  //each axis reading comes in 10 bit resolution, ie 2 bytes.  Least Significat Byte first!!
+  //thus we are converting both bytes in to one int
+  x1 = (((int)buff[1]) << 8) | buff[0];   
+  y1 = (((int)buff[3])<< 8) | buff[2];
+  z1 = (((int)buff[5]) << 8) | buff[4];
+  
+  //we send the x y z values as a string to the serial port
+  sprintf(str, "%d %d %d %d %d %d\n", x0, y0, z0, x1, y1, z1);  
+	return str;
+  
+  //It appears that delay is needed in order not to clog the port
+  delay(5);
+}
+
+void loop()
+{
+  Serial.print(misura());
+}
