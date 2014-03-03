@@ -148,7 +148,7 @@ void loop()
 		if (! *corsoLettura) {
 			for (int count=0;count<*numeroCicliRichiesti;count++) {
 				misura();
-				//delay(5);	
+				//delay(5);	//alcuni browser (per esempio webkit) richiedono di introdurre un ritardo per ridurre il data rate.
 				sprintf(str,"%lu %d %d %d %d %d %d\n", _lt->marcaTempo, _lt->acc0.x, _lt->acc0.y, _lt->acc0.z, _lt->acc1.x, _lt->acc1.y, _lt->acc1.z);
 				Serial.print(str);
 				/*

@@ -2,11 +2,7 @@ dueAccelerometri
 ==========
 
 ----
-Branch in fase di ampliamento.
-Contiene l'adattamento del branch "accelerometro" all'utilizzo simultaneo di due accelerometri.
-
-----
-Questo branch contiene il software relativo alla sperimentazione didattica in tema di sismologia del Liceo Paschini,
+Questo branch contiene software relativo alla sperimentazione didattica in tema di sismologia del Liceo Paschini,
 in collaborazione con il Centro di Ricerche Sismologiche di Udine (http://www.crs.inogs.it), che è una sezione staccata
 dell'OGS - Istituto Nazionale di Oceanografia e di Geofisica Sperimentale (http://www.inogs.it).
 
@@ -15,6 +11,7 @@ http://www.cloc3.net/dokuwiki/doku.php/progettoSisifo
 
 ----
 
+Questo branch è specifico all'uso simultaneo di due accelerometri ADXL345.
 Contenuti del branch:
 
  - file ADXL345.pdf # contiene le specifiche dell'accelerometro adxl345.
@@ -27,27 +24,28 @@ Contenuti del branch:
 
 ----
 
-Informazioni sula cartella sketchAdxl345:
+Informazioni sulla cartella dueAccelerometri:
 
- - sketchAdafruit # https://github.com/adafruit/Adafruit\_ADXL345
- - sketchGuida #  http://codeyoung.blogspot.it/2009/11/adxl345-accelerometer-breakout-board.html
- - sketchArduGiochi # sketch per l'applicazione monitor
- - sketchArduGiochi.ino # collegamento con funzioni di wrapper (selettore).
+ - sketchAdafruit # https://github.com/adafruit/Adafruit\_ADXL345 (per un singolo accelerometro)
+ - acc2Guida #  http://codeyoung.blogspot.it/2009/11/adxl345-accelerometer-breakout-board.html
+ - acc2ArduGiochi # sketch per l'applicazione monitor
+ - ritardoSegnale # studio in fase di sviluppo per la rilevazione del ritardo nella rilevazione di un singolo segnale.
+ - dueAccelerometri.ino # collegamento con funzioni di wrapper (selettore).
  - SConstruct # collegamento allo script arscons (https://github.com/suapapa/arscons) per la compilazione.
 
 ----
 
-Come usare lo sketchArduGiochi:
+Come usare lo acc2ArduGiochi:
 
-$ cd sketchAdxl345
-$ ln -sf sketchArduGiochi sketchAdxl345.ino # prepara il collegamento
+$ cd dueAccelerometri
+$ ln -sf acc2ArduGiochi dueAccelerometri.ino # prepara il collegamento
 $ scons upload
 $ exec 5<>/dev/arduino #> rende disponibile la porta /dev/arduino in lettura e scrittura
 $ head -n 80 </dev/arduino & echo -n 80 >/dev/arduino # stampa 80 letture consecutive dell'accelerometro.
 
-Il formato dei dati prodotti dallo sketchArduGiochi è:
+Il formato dei dati prodotti dallo acc2ArduGiochi è:
 
-time x y z
+time x0 y0 z0 x1 y1 z1
 
 ---
 cartella ./adxlWeb
@@ -75,7 +73,8 @@ Il file adxlWeb/adxl345.mp4 contiene un video dimostrativo.
 ----
 cartella ./librerie
 
-Contiene la libreria che gestisce l'input-output dalla porta seriale.
+Contiene una libreria che gestisce l'input-output dalla porta seriale.
+Aggiunta la libreria con le funzioni di input output verso il sensore.
 Per utilizzarla con scons, impostare la variabile d'ambiente EXTRA_LIB.
 
 ----
