@@ -11,7 +11,9 @@
 
 #include <letturaIntero.h>
 #include <Wire.h>
+#include <ritardoSegnale.h>
 
+/*
 #define DEVICE0 (0x53)		// indirizzo fisico per l'accelerometro in modalità i2c, con SDO=0
 #define DEVICE1 (0x1D)		// indirizzo fisico per l'accelerometro in modalità i2c, con SDO=1
 
@@ -57,6 +59,7 @@ void readFrom(int device, byte address, int num, byte buff[]) {
 	}
   Wire.endTransmission();					// chiusura della comunicazione
 }
+*/
 
 void misura()
 {
