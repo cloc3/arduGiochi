@@ -15,17 +15,19 @@
 #define DEVICE0 (0x53)		// indirizzo fisico per l'accelerometro in modalità i2c, con SDO=0
 #define DEVICE1 (0x1D)		// indirizzo fisico per l'accelerometro in modalità i2c, con SDO=1
 
-#define TO_READ (6)			// lunghezza in byte dello spazio dati (due byte per ciascun asse)
+#define TO_READ (6)				// lunghezza in byte dello spazio dati (due byte per ciascun asse)
 
-byte buff[TO_READ] ;		// preparazione dello spazio di memoria dedicato all'acquisizione dei dati
-char str[512];					// stringa destinata alla rappresentazione dei dati in formato carattere
+#define SOGLIA 10					// scarto dalla media per riconoscere un evento
+
+byte buff[TO_READ] ;			// preparazione dello spazio di memoria dedicato all'acquisizione dei dati
+char str[512];						// stringa destinata alla rappresentazione dei dati in formato carattere
 
 struct accelerazione {
 	int x, y, z;
 };
 
 struct evento {
-	unsigned long tempo;
+	unsigned long marcaTempo;
 	struct accelerazione acc0, acc1;
 };
 
@@ -60,7 +62,7 @@ void misura()
 {
 	int regAddress = 0x32;					// indirizzo fisico del primo registro dati sull'accelerometro ADXL345
 
-	_lt->tempo=micros();																// tempo corrente dall'accensione di arduino, in microsecondi
+	_lt->marcaTempo=micros();																// tempo corrente dall'accensione di arduino, in microsecondi
 	readFrom(DEVICE0, regAddress, TO_READ, buff);	// lettura del campo dati sull'accelerometro ADXL345
 						// per ciascun asse sono riservati 10 bit di precisione (più il segno?). Il primo byte contiene le cifre più significative
 						// each axis reading comes in 10 bit resolution, ie 2 bytes. Least Significant Byte first!!
@@ -74,14 +76,10 @@ void misura()
 	_lt->acc1.x = (((int)buff[1]) << 8) | buff[0];
 	_lt->acc1.y = (((int)buff[3]) << 8) | buff[2];
 	_lt->acc1.z = (((int)buff[5]) << 8) | buff[4];
-
-	delay(5); // il ritardo consigliato da blogspot per il ripristino della comunicazione i2c è 15 millisecondi
-						// il data rate può modificato usando il registro 0x2C 
 }
 
 unsigned long ritardoSegnale()
 {
-	#define SOGLIA 3
 	int i, z0Medio, z1Medio;
 
 	boolean attesa0, attesa1; // stato di attesa di un evento 
@@ -92,7 +90,7 @@ unsigned long ritardoSegnale()
 
 	/*	Questo blocco valuta un valore medio per la componente z di accelerazione
 			Utile in fase di tartura
-	/*
+	*/
 	z0Medio=0;
 	z1Medio=0;
 	for (i=0; i<10;i++) { 
@@ -108,15 +106,15 @@ unsigned long ritardoSegnale()
 		misura();
 		if ( abs(_lt->acc0.z - z0Medio) > SOGLIA) {
 			attesa0=0;
-			if (attesa1) inizioAttesa = _lt->tempo;
+			if (attesa1) inizioAttesa = _lt->marcaTempo;
 		}
 		if ( abs(_lt->acc1.z - z1Medio) > SOGLIA) {
 			attesa1=0;
-			if (attesa0) inizioAttesa = _lt->tempo;
+			if (attesa0) inizioAttesa = _lt->marcaTempo;
 		}
 	}
 
-	return abs(_lt->tempo - inizioAttesa);	
+	return abs(_lt->marcaTempo - inizioAttesa);
 }
 
 void setup()
@@ -125,18 +123,20 @@ void setup()
 	Serial.begin(115200);						// impostazione della porta seriale
 
 	//operazioni di accensione dell'accelerometro ADXL345
-	writeTo(DEVICE0, 0x2D, 0);      
-	writeTo(DEVICE0, 0x2D, 16);
-	writeTo(DEVICE0, 0x31, 0);				// questa configurazione seleziona il range +/-2g. impostare 8 per ottenere la massima risoluzione 4mg/LSB (da capire meglio)
-	//writeTo(DEVICE0, 0x31, 8);			// questa configurazione seleziona il range +/-2g. impostare 8 per ottenere la massima risoluzione 4mg/LSB (da capire meglio)
-	writeTo(DEVICE0, 0x2D, 8);
-	//writeTo(DEVICE0, 0x2C, 0xB);			//DATA RATE a 200Hz
-	writeTo(DEVICE1, 0x2D, 0);      
-	writeTo(DEVICE1, 0x2D, 16);
-	writeTo(DEVICE1, 0x31, 0);				// questa configurazione seleziona il range +/-2g. impostare 8 per ottenere la massima risoluzione 4mg/LSB (da capire meglio)
-	//writeTo(DEVICE1, 0x31, 8);			// questa configurazione seleziona il range +/-2g. impostare 8 per ottenere la massima risoluzione 4mg/LSB (da capire meglio)
-	writeTo(DEVICE1, 0x2D, 8);
-	//writeTo(DEVICE1, 0x2C, 0xB);			//DATA RATE a 200Hz
+	writeTo(DEVICE0, 0x2D, 0);     	// Dispone l'accelerometro in standby. 
+	writeTo(DEVICE0, 0x2C, 0xC);		// clock SCL a 400Hz -> Data rate 800 Hz
+	writeTo(DEVICE0, 0x31, 0);			// questa configurazione seleziona il range +/-2g. impostare 8 per ottenere la massima risoluzione 4mg/LSB (da capire meglio)
+	//writeTo(DEVICE0, 0x31, 8);		// questa configurazione seleziona il range +/-2g. impostare 8 per ottenere la massima risoluzione 4mg/LSB (da capire meglio)
+	//writeTo(DEVICE0, 0x2D, 16);			// pone il dispositivo in auto sleep
+	writeTo(DEVICE0, 0x2D, 8);			// attiva la modalità di lettura
+
+	//operazioni di accensione dell'accelerometro ADXL345
+	writeTo(DEVICE1, 0x2D, 0);     	// Dispone l'accelerometro in standby. 
+	writeTo(DEVICE1, 0x2C, 0xC);		// clock SCL a 400Hz -> Data rate 800 Hz
+	writeTo(DEVICE1, 0x31, 0);			// questa configurazione seleziona il range +/-2g. impostare 8 per ottenere la massima risoluzione 4mg/LSB (da capire meglio)
+	//writeTo(DEVICE1, 0x31, 8);		// questa configurazione seleziona il range +/-2g. impostare 8 per ottenere la massima risoluzione 4mg/LSB (da capire meglio)
+	//writeTo(DEVICE1, 0x2D, 16);			// pone il dispositivo in auto sleep
+	writeTo(DEVICE1, 0x2D, 8);			// attiva la modalità di lettura
 }
 
 void loop()
@@ -146,7 +146,8 @@ void loop()
 			for (int count=0;count<*numeroCicliRichiesti;count++) {
 				/*
 				misura();
-				sprintf(str,"%lu %d %d %d %d %d %d\n", _lt->tempo, _lt->acc0.x, _lt->acc0.y, _lt->acc0.z, _lt->acc1.x, _lt->acc1.y, _lt->acc1.z);
+				delay(5);	
+				sprintf(str,"%lu %d %d %d %d %d %d\n", _lt->marcaTempo, _lt->acc0.x, _lt->acc0.y, _lt->acc0.z, _lt->acc1.x, _lt->acc1.y, _lt->acc1.z);
 				Serial.print(str);
 				*/
 				Serial.print("ritardo misurato = ");
