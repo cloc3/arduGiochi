@@ -1,7 +1,7 @@
 function gestioneGrafici(velox) {
 
 // preparazione del vettore globale che contiene i dati da rappresentare nella canvas 
-	eventi = new Array;
+	stringaEventi = new Array;
 
 // preaparazione delle canvas
 	xCanvas = document.getElementById('graficoX');
@@ -11,23 +11,21 @@ function gestioneGrafici(velox) {
 	cty = yCanvas.getContext('2d');
 	ctz = zCanvas.getContext('2d');
 
-	ajaxGet(document.URL.slice(0,-1)+":8000",graph,0,velox);
+	ajaxGet(document.URL.slice(0,-1)+":8000",graph,velox);
 }
 
-function graph(content,tempoFinale,velox) {
+function graph(content,velox) {
 
-	var tempoFinalePrecedente = tempoFinale;
-
-// acquisizione dei dati e aggiornamento del vettore eventi.
+// acquisizione dei dati e aggiornamento del vettore stringaEventi.
 	var nuoviEventi = content.split("\n");
 	nuoviEventi.pop();
-	var tempoFinale = (nuoviEventi[nuoviEventi.length-1].split(" "))[0]
-	eventi=nuoviEventi.concat(eventi);
+	var ultimoMarcaTempo = (nuoviEventi[nuoviEventi.length-1].split(" "))[0]
+	stringaEventi=nuoviEventi.concat(stringaEventi);
 
-// rimozione dal vettore eventi dei dati in eccesso
+// rimozione dal vettore stringaEventi dei dati in eccesso
 // (troppo lontani nel passato, quindi fuori dalla canvas).
-	var l = eventi.length;
-		while ((tempoFinale - eventi[l=l-1].split(" ")[0])/velox > ctx.canvas.width) eventi.pop()
+	var l = stringaEventi.length;
+		while ((ultimoMarcaTempo - stringaEventi[l=l-1].split(" ")[0])/velox > ctx.canvas.width) stringaEventi.pop()
 
 // pulizia e successivo ridisegno della canvas.
 	ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -37,12 +35,12 @@ function graph(content,tempoFinale,velox) {
 	ctx.beginPath();
 	cty.beginPath();
 	ctz.beginPath();
-	for (var i=0;i<eventi.length;i++) {
-		var coord = eventi[i].split(" ");
+	for (var i=0;i<stringaEventi.length;i++) {
+		var coord = stringaEventi[i].split(" ");
 		if (coord.length==4) {
-   		ctx.lineTo((tempoFinale - coord[0])/velox,50+Number(coord[1]));
-   		cty.lineTo((tempoFinale - coord[0])/velox,50+Number(coord[2]));
-   		ctz.lineTo((tempoFinale - coord[0])/velox,-245+50+Number(coord[3]));
+   		ctx.lineTo((ultimoMarcaTempo - coord[0])/velox,50+Number(coord[1]));
+   		cty.lineTo((ultimoMarcaTempo - coord[0])/velox,50+Number(coord[2]));
+   		ctz.lineTo((ultimoMarcaTempo - coord[0])/velox,-245+50+Number(coord[3]));
 		}
 	}
 	ctx.stroke();
@@ -50,5 +48,5 @@ function graph(content,tempoFinale,velox) {
 	ctz.stroke();
 
 // acquisizione ricorsiva di nuovi dati
-	ajaxGet(document.URL.slice(0,-1)+":8000",graph,0,velox);
+	ajaxGet(document.URL.slice(0,-1)+":8000",graph,velox);
 }
