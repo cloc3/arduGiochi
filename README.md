@@ -51,7 +51,7 @@ time x0 y0 z0 x1 y1 z1
 cartella ./adxlWeb
 
 Contiene una applicazione web per il monitoraggio dell'accelerometro e un server web in linguaggio bash, basato su netcat, per la trasmissione dei dati su internet.
-Testato con konqueror (webkit), midori (webkit) e firefox.
+Testato con konqueror (webkit), midori (webkit), firefox e chromium-browser.
 Non funziona con konqueror (khtml) e google-chrome.
 
 Il servizio web è il programma ncWebServer.sh.
@@ -65,7 +65,7 @@ Rispetta lo standard html5, scambia dati con la tecnica ajax (script js/ajax.js)
 
 Per utilizzare il monitor, è sufficiente lanciare l'applicazione web, quando:
  - arduino è collegato attraverso la porta seriale alla macchina che gestisce il servizio web;
- - lo sketch sketchArduGiochi.ino è caricato e attivo (lanciare ad esempio scons upload);
+ - lo sketch acc2ArduGiochi è caricato e attivo su arduino;
  - il servizio ncWebServer.sh è attivo.
 
 Il file adxlWeb/adxl345.mp4 contiene un video dimostrativo.
