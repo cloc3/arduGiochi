@@ -19,7 +19,7 @@ struct evento {
 	struct accelerazione acc0, acc1;
 };
 
-struct evento lettura, *_lt = &lettura;
+struct evento _lettura, *lettura = &_lettura;
 
 void readFrom(int device, byte address, int num, byte buff[]);
 void writeTo(int device, byte address, byte val);
