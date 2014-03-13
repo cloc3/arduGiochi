@@ -11,8 +11,8 @@
   <title>adxl345</title>
 	<script type="application/javascript">
 	function avvio() {
-		var velox = 50000;
-		gestioneGrafici(velox);
+		var finestraTemporale = 10000000; // tempo necessario ad un impulso per attraversare la finestra, in millisecondi
+		gestioneGrafici(finestraTemporale/600);
 	}
 	</script>
 </head>
@@ -42,8 +42,6 @@
 </section>
 
 	<footer id="footer">
-		<div id="utenteAttivo" style="display:none"></div>
-
 		<p>
 			<br>
   		<a href="http://jigsaw.w3.org/css-validator/check/referer">

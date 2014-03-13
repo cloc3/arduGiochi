@@ -1,4 +1,4 @@
-function gestioneGrafici(velox) {
+function gestioneGrafici(densita) {
 
 // preparazione del vettore globale che contiene i dati da rappresentare nella canvas 
 	stringaEventi = new Array;
@@ -11,10 +11,10 @@ function gestioneGrafici(velox) {
 	cty = yCanvas.getContext('2d');
 	ctz = zCanvas.getContext('2d');
 
-	ajaxGet(document.URL.slice(0,-1)+":8000",graph,velox);
+	ajaxGet(document.URL.slice(0,-1)+":8000",graph,densita);
 }
 
-function graph(content,velox) {
+function graph(content,densita) {
 
 // acquisizione dei dati e aggiornamento del vettore stringaEventi.
 	var nuoviEventi = content.split("\n");
@@ -25,7 +25,7 @@ function graph(content,velox) {
 // rimozione dal vettore stringaEventi dei dati in eccesso
 // (troppo lontani nel passato, quindi fuori dalla canvas).
 	var l = stringaEventi.length;
-		while ((ultimoMarcatempo - stringaEventi[l=l-1].split(" ")[0])/velox > ctx.canvas.width) stringaEventi.pop()
+		while ((ultimoMarcatempo - stringaEventi[l=l-1].split(" ")[0])/densita > ctx.canvas.width) stringaEventi.pop()
 
 // pulizia e successivo ridisegno della canvas.
 	ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -43,9 +43,9 @@ function graph(content,velox) {
 	for (var i=0;i<stringaEventi.length;i++) {
 		var coord = stringaEventi[i].split(" ");
 		if (coord.length==7) {
-   		ctx.lineTo((ultimoMarcatempo - coord[0])/velox,50+Number(coord[1]));
-   		cty.lineTo((ultimoMarcatempo - coord[0])/velox,50+Number(coord[2]));
-   		ctz.lineTo((ultimoMarcatempo - coord[0])/velox,-245+50+Number(coord[3]));
+   		ctx.lineTo((ultimoMarcatempo - coord[0])/densita,50+Number(coord[1]));
+   		cty.lineTo((ultimoMarcatempo - coord[0])/densita,50+Number(coord[2]));
+   		ctz.lineTo((ultimoMarcatempo - coord[0])/densita,-245+50+Number(coord[3]));
 		}
 	}
 	ctx.stroke();
@@ -63,9 +63,9 @@ function graph(content,velox) {
 	for (var i=0;i<stringaEventi.length;i++) {
 		var coord = stringaEventi[i].split(" ");
 		if (coord.length==7) {
-   		ctx.lineTo((ultimoMarcatempo - coord[0])/velox,50+Number(coord[4]));
-   		cty.lineTo((ultimoMarcatempo - coord[0])/velox,50+Number(coord[5]));
-   		ctz.lineTo((ultimoMarcatempo - coord[0])/velox,-245+50+Number(coord[6]));
+   		ctx.lineTo((ultimoMarcatempo - coord[0])/densita,50+Number(coord[4]));
+   		cty.lineTo((ultimoMarcatempo - coord[0])/densita,50+Number(coord[5]));
+   		ctz.lineTo((ultimoMarcatempo - coord[0])/densita,-245+50+Number(coord[6]));
 		}
 	}
 	ctx.stroke();
@@ -73,5 +73,5 @@ function graph(content,velox) {
 	ctz.stroke();
 
 // acquisizione ricorsiva di nuovi dati
-	ajaxGet(document.URL.slice(0,-1)+":8000",graph,velox);
+	ajaxGet(document.URL.slice(0,-1)+":8000",graph,densita);
 }
