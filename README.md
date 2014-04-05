@@ -20,7 +20,7 @@ Contenuti del branch:
  - cartella adxlWeb # contiene:
 		a) ncWebService.sh: servizio, basato su netcat6, per redirigere il flusso di arduino verso una connessione ip/tcp.
 		b) file index.html + cartelle di contorno: applicazione web per visualizzare un monitor dell'accelerometro
- - Le rimanenti cartelle sono di servizio: da rimuovere.
+ - cartella passerotto # contiene lo sketch per utilizzare la fotoresistenza. Vedi il branch passerotto.
 
 ----
 
