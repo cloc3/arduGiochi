@@ -7,11 +7,11 @@
 #define LED 13								// LED collegato al pin digitale 13
 #define fotoResistenza 0			// indirizzo fisico del canale di lettura
 #define ciclo 800							// intervallo di acquisizione del dato
-#define MAXINPUT 850					// valore del canale di input in condizioni di massima illuminazione (minima resistenza)
+#define MAXINPUT 350					// valore del canale di input in condizioni di massima illuminazione (minima resistenza)
 #define MININPUT 60						// valore del canale di input in condizioni di minima illuminazione (massima resistenza)
 #define MAXFREQ 25						// massima frequenza di lampeggio
 #define MINFREQ 1							// minima frequenza di lampeggio
-#define intensita 40					// tempo di accensione della lampadina (fissare inferiore a ciclo/MAXFREQ)
+#define intensita 5					// tempo di accensione della lampadina (fissare inferiore a ciclo/MAXFREQ)
 
 int luce;
 int freq;
@@ -40,20 +40,22 @@ void loop()
 	luce = analogRead(fotoResistenza);
 	freq = MAXFREQ - (luce - MININPUT)/unoSuM;
 
+	// definizione della frequenza di lampeggiamento
+	if ( freq < MINFREQ) {							// filtro per alta illuminazione
+		freq=MINFREQ; 
+	} else if (freq > MAXFREQ ) {				// filtro per bassa illuminazione
+		freq=MAXFREQ; 
+	}
+	lampeggio=ciclo/freq; 
+
 	// stampa di controllo via seriale
 	Serial.print("luce = ");
 	Serial.println(luce);
 	Serial.print("frequenza = ");
 	Serial.println(freq);
-
-	// definizione della frequenza di lampeggiamento
-	if ( freq < MINFREQ) {							// filtro per alta illuminazione
-		lampeggio=ciclo; 
-	} else if (freq > MAXFREQ ) {				// filtro per bassa illuminazione
-		lampeggio=ciclo/MAXFREQ; 
-	} else {
-		lampeggio=ciclo/freq; 
-	}
+	Serial.print("lampeggio = ");
+	Serial.println(lampeggio);
+	Serial.println("");
 
 	// esecuzione del lampeggiamento
 	for (indice = 0;indice < freq; indice++) {
