@@ -65,7 +65,6 @@ char *misura()
   x0 = (((int)buff[1]) << 8) | buff[0];   
   y0 = (((int)buff[3])<< 8) | buff[2];
   z0 = (((int)buff[5]) << 8) | buff[4];
-
 	readFrom(DEVICE1, regAddress, TO_READ, buff); //read the acceleration data from the ADXL345
   
   //each axis reading comes in 10 bit resolution, ie 2 bytes.  Least Significat Byte first!!
@@ -76,6 +75,12 @@ char *misura()
   
   //we send the x y z values as a string to the serial port
   sprintf(str, "%d %d %d %d %d %d\n", x0, y0, z0, x1, y1, z1);  
+/*
+	x1=0;
+	y1=0;
+	z1=0;
+  sprintf(str, "%d %d %d\n", x0, y0, z0);  
+*/
 	return str;
   
   //It appears that delay is needed in order not to clog the port
