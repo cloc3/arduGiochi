@@ -6,3 +6,8 @@
 *.elf
 build
 .sconsign.dblite
+
+#file sperimentali
+*prova*
+*porc*
+porc

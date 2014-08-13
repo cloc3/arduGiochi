@@ -12,12 +12,12 @@
 	<script type="application/javascript">
 	function avvio() {
 		var finestraTemporale = 10000000; // tempo necessario ad un impulso per attraversare la finestra, in millisecondi
-		gestioneGrafici(finestraTemporale/600);
+		gestioneGrafici(finestraTemporale/600,2);
 	}
 	</script>
 </head>
 
-<body onload="avvio()">
+<body id="corpo" onload="avvio()">
 	<header id="header">
 		<h1>Pulsazione di tre condensatori</h1>
 		<img src="img/apriletuefinestre.jpg">
