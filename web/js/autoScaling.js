@@ -1,6 +1,6 @@
 var colore = function() {
-    return '#'+Math.round(Math.random()*0x1000000).toString(0xF);
-   }
+	return "#"+("00000"+Math.round(Math.random()*0x1000000).toString(0x10)).substr(-6,6)
+}
 
 var confronto = function(a,b,selettore) {
 	if (selettore == "min") return foo = a < b ?  true  :  false
