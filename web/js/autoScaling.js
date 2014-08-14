@@ -1,3 +1,7 @@
+var segno = function(condizione) {
+	return Math.pow(-1,condizione)
+}
+
 var colore = function() {
 	return "#"+("00000"+Math.round(Math.random()*0x1000000).toString(0x10)).substr(-6,6)
 }
@@ -106,6 +110,13 @@ function graph(content,densita,numeroGrafici) {
 	if (!window.numeroOrdinate) numeroOrdinate=nuoviEventi[0].split(" ").length -1
 	if (!window.numeroCanali)	numeroCanali=Math.floor(numeroOrdinate/numeroGrafici)
 	if (!window.coloreCanali)	{ coloreCanali = new Array(); for ( var nS=0; nS<numeroCanali; nS++) coloreCanali[nS] = colore()}
+	if (!window.direzioneCanali)	{
+		direzioneCanali = new Array();
+		for ( var nS=0; nS<numeroCanali; nS++) {
+			if (nS==0) direzioneCanali[nS] = "dx"
+			else direzioneCanali[nS] = "sx"
+		}
+	}
 	for (var nE in nuoviEventi) {
 		var evento=nuoviEventi[nE].split(" ")
 		for (var i in evento) evento[i]=Number(evento[i])
@@ -158,7 +169,8 @@ function graph(content,densita,numeroGrafici) {
 
 			vettoreContext[nG].beginPath()
 			for (var punto of vettoreTracce[nG]) {
-				vettoreContext[nG].lineTo((marcatempoFinale-punto[0])/densita,h-(punto[nS]-vettoreMedio[nG])*vettoreScala[nG])
+				// per dispetto, una coordinata viaggia al contrario
+				vettoreContext[nG].lineTo(w*(direzioneCanali[nS-1]=="dx")+segno(direzioneCanali[nS-1]=="dx")*(marcatempoFinale-punto[0])/densita,h-(punto[nS]-vettoreMedio[nG])*vettoreScala[nG])
 			}
 			vettoreContext[nG].stroke()
 		}
