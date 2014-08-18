@@ -5,14 +5,17 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <script type="text/javascript" src="js/scripts.js"></script>
   <script type="text/javascript" src="js/ajax.js"></script>
+  <script type="text/javascript" src="js/parametriIniziali.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
+  <script type="text/javascript" src="js/interfacciaUtente.js"></script>
   <link rel="stylesheet" type="text/css" href="css/stile.css">
   <link rel="stylesheet" type="text/css" href="css/layout.css">
+  <link rel="stylesheet" type="text/css" href="css/menu.css">
   <title>adxl345</title>
 	<script type="application/javascript">
 	function avvio() {
 		var finestraTemporale = 10000000; // tempo necessario ad un impulso per attraversare la finestra, in millisecondi
-		gestioneGrafici(finestraTemporale/600,2);
+		gestioneGrafici(finestraTemporale/600,numeroGrafici);
 	}
 	</script>
 </head>
@@ -24,14 +27,15 @@
 	</header>
 
 <section id="container">
-	<nav id="menu"></nav>
-	<div id="areaDiLavoro" style="display:block">
-		<div id="asseX">asse X
-			<canvas id="graficoX" width="600px" height="400px" />
-		</div>
-		<div id="commento"></div>
-		<div id="test"></div>
-	</div>
+	<nav id="menu">
+<ul id="tendinaDirezioni" class="menuSuperiore">
+  <li class="menu" id="cambiaDirezione" title="" onmouseover="creaListaDirezioni(this)">cambiaDirezione</li>
+</ul>
+<ul id="tendinaGrafici" class="menuSuperiore">
+  <li class="menu" id="numeroGrafici" onmouseover="controlloNumeroGrafici(this)">numero grafici</li>
+</ul>
+</nav>
+	<div id="areaDiLavoro" style="display:block"></div>
 </section>
 
 	<footer id="footer">

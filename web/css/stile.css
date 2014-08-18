@@ -19,6 +19,7 @@ a:hover {}
 width: 95%;
 margin-left:auto;
 margin-right:auto;
+border: 1px solid grey;
 }
 
 #header {
@@ -54,4 +55,10 @@ border: 1px solid red;
 background-color: #dc4;
 color: #000;
 text-align:center;
+}
+
+ul #tedina {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }

@@ -14,8 +14,8 @@ var confronto = function(a,b,selettore) {
 var somma = function (vettore) {
 	return vettore.reduce(function(prev,curr,index,array){
 		curr_0=curr.shift()
-		tot=0
-		for (n of curr) tot+=n
+		var tot=0
+		for (var n of curr) tot+=n
 		curr.unshift(curr_0)
  		return prev+tot
 	},0)
@@ -35,14 +35,7 @@ var ricalcoloEstremi = function(vettore,selettore) {
 	}, this.cambiaFunzione(selettore).init)
 }
 
-min = new Array(0,1024,0,"min")
-max = new Array(0,-1024,0,"max")
-Min = new Array(0,1024,0,"min")
-Max = new Array(0,-1024,0,"max")
-vettoreMedio = new Array()
-vettoreScala= new Array()
-
-function gestioneGrafici(densita,numeroGrafici) {
+function gestioneGrafici(densita) {
 
 // preparazione del vettore globale che contiene i dati da rappresentare nella canvas 
 	vettoreEventi = new Array;
@@ -99,22 +92,25 @@ function gestioneGrafici(densita,numeroGrafici) {
 	if (!window.vettoreMax) { vettoreMax = new Array();for (var nG=0; nG<numeroGrafici; nG++) vettoreMax=[max].concat(vettoreMax)}
 
 // acquisizione da remoto e successiva riproduzione grafica dei dati
-	ajaxGet(document.URL.slice(0,-1)+":8000",graph,Number(densita),numeroGrafici);
+	ajaxGet(document.URL.slice(0,-1)+":8000",graph,Number(densita));
 }
 
-function graph(content,densita,numeroGrafici) {
+function graph(content,densita) {
 
+	var numeroGrafici_=numeroGrafici
 // acquisizione dei dati e aggiornamento del vettore vettoreEventi.
 	content = content.substr(1,content.length-2)
 	var nuoviEventi = content.split("\n");
-	if (!window.numeroOrdinate) numeroOrdinate=nuoviEventi[0].split(" ").length -1
-	if (!window.numeroCanali)	numeroCanali=Math.floor(numeroOrdinate/numeroGrafici)
+	if (!window.numeroCanali) {
+		numeroOrdinate=nuoviEventi[0].split(" ").length -1
+		numeroCanali=Math.floor(numeroOrdinate/numeroGrafici_)
+	}
 	if (!window.coloreCanali)	{ coloreCanali = new Array(); for ( var nS=0; nS<numeroCanali; nS++) coloreCanali[nS] = colore()}
 	if (!window.direzioneCanali)	{
 		direzioneCanali = new Array();
 		for ( var nS=0; nS<numeroCanali; nS++) {
-			if (nS==0) direzioneCanali[nS] = "dx"
-			else direzioneCanali[nS] = "sx"
+			if (nS==0) direzioneCanali[nS] = "rtl"
+			else direzioneCanali[nS] = "ltr"
 		}
 	}
 	for (var nE in nuoviEventi) {
@@ -122,7 +118,7 @@ function graph(content,densita,numeroGrafici) {
 		for (var i in evento) evento[i]=Number(evento[i])
 		eventoSingoloCanale=evento
 		tempo = eventoSingoloCanale.shift()
-		for (var nG = 0; nG < numeroGrafici; nG++) {
+		for (var nG = 0; nG < numeroGrafici_; nG++) {
 			var eventoSingoloCanale=evento.splice(0,numeroCanali)
 			// ricerca di eventuali eventi esterni agli estremi correnti, per un eventuale ricalcolo della scala
 			for ( var ctrl of [vettoreMin[nG],vettoreMax[nG]] ) {
@@ -170,7 +166,7 @@ function graph(content,densita,numeroGrafici) {
 			vettoreContext[nG].beginPath()
 			for (var punto of vettoreTracce[nG]) {
 				// per dispetto, una coordinata viaggia al contrario
-				vettoreContext[nG].lineTo(w*(direzioneCanali[nS-1]=="dx")+segno(direzioneCanali[nS-1]=="dx")*(marcatempoFinale-punto[0])/densita,h-(punto[nS]-vettoreMedio[nG])*vettoreScala[nG])
+				vettoreContext[nG].lineTo(w*(direzioneCanali[nS-1]=="rtl")+segno(direzioneCanali[nS-1]=="rtl")*(marcatempoFinale-punto[0])/densita,h-(punto[nS]-vettoreMedio[nG])*vettoreScala[nG])
 			}
 			vettoreContext[nG].stroke()
 		}
@@ -201,5 +197,6 @@ function graph(content,densita,numeroGrafici) {
 		vettoreContext[nG].stroke()
 	}
 
-	ajaxGet(document.URL.slice(0,-1)+":8000",graph,densita,numeroGrafici);
+// lettura ricorsiva
+	if (numeroGrafici==numeroGrafici_) ajaxGet(document.URL.slice(0,-1)+":8000",graph,densita);
 }

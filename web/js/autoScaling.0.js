@@ -1,14 +1,10 @@
+var segno = function(condizione) {
+	return Math.pow(-1,condizione)
+}
+
 var colore = function() {
-
-    var colore = '#';
-    var hex = '0123456789ABCDEF'.split('');
-     for(var i=0; i<=5; i++){
-       colore +=  hex[Math.round(Math.random() * 16)];
-     }
-
-		return colore
-    return Math.round(Math.random()*0x1000000);
-   }
+	return "#"+("00000"+Math.round(Math.random()*0x1000000).toString(0x10)).substr(-6,6)
+}
 
 var confronto = function(a,b,selettore) {
 	if (selettore == "min") return foo = a < b ?  true  :  false
@@ -112,28 +108,35 @@ function graph(content,densita,numeroGrafici) {
 	content = content.substr(1,content.length-2)
 	var nuoviEventi = content.split("\n");
 	if (!window.numeroOrdinate) numeroOrdinate=nuoviEventi[0].split(" ").length -1
-	if (!window.numeroSensori)	numeroSensori=Math.floor(numeroOrdinate/numeroGrafici)
-	if (!window.coloriSensori)	{ coloriSensori = new Array(); for ( var nS=0; nS<numeroSensori; nS++) coloriSensori[nS] = colore()}
+	if (!window.numeroCanali)	numeroCanali=Math.floor(numeroOrdinate/numeroGrafici)
+	if (!window.coloreCanali)	{ coloreCanali = new Array(); for ( var nS=0; nS<numeroCanali; nS++) coloreCanali[nS] = colore()}
+	if (!window.direzioneCanali)	{
+		direzioneCanali = new Array();
+		for ( var nS=0; nS<numeroCanali; nS++) {
+			if (nS==0) direzioneCanali[nS] = "dx"
+			else direzioneCanali[nS] = "sx"
+		}
+	}
 	for (var nE in nuoviEventi) {
 		var evento=nuoviEventi[nE].split(" ")
 		for (var i in evento) evento[i]=Number(evento[i])
-		eventoSingoloSensore=evento
-		tempo = eventoSingoloSensore.shift()
+		eventoSingoloCanale=evento
+		tempo = eventoSingoloCanale.shift()
 		for (var nG = 0; nG < numeroGrafici; nG++) {
-			var eventoSingoloSensore=evento.splice(0,numeroSensori)
+			var eventoSingoloCanale=evento.splice(0,numeroCanali)
 			// ricerca di eventuali eventi esterni agli estremi correnti, per un eventuale ricalcolo della scala
 			for ( var ctrl of [vettoreMin[nG],vettoreMax[nG]] ) {
-				for (var canale in eventoSingoloSensore) {
-					if (confronto(eventoSingoloSensore[canale],ctrl[1],ctrl[3])) {
+				for (var canale in eventoSingoloCanale) {
+					if (confronto(eventoSingoloCanale[canale],ctrl[1],ctrl[3])) {
 						ctrl[0]=tempo
-						ctrl[1]=eventoSingoloSensore[canale]
+						ctrl[1]=eventoSingoloCanale[canale]
 						ctrl[2]=1
 					}
 				}
 			} // fine ciclo cu ctrl
-			eventoSingoloSensore.splice(0,0,tempo)
+			eventoSingoloCanale.splice(0,0,tempo)
 			if (!window.vettoreTracce[nG]) vettoreTracce[nG] = new Array()
-			vettoreTracce[nG] = [eventoSingoloSensore].concat(vettoreTracce[nG])
+			vettoreTracce[nG] = [eventoSingoloCanale].concat(vettoreTracce[nG])
 		} // fine primo ciclo su nG
 	} //fine ciclo su nE 
 	for ( nG in vettoreTracce) {
@@ -142,12 +145,11 @@ function graph(content,densita,numeroGrafici) {
 		var l = vettoreTracce[nG].length
 		var marcatempoFinale = vettoreTracce[nG][0][0]
 		while ((marcatempoFinale - vettoreTracce[nG][l-=1][0])/densita > w)	vettoreTracce[nG].pop()
-		//while ((marcatempoFinale - vettoreTracce[nG][l-=1][0])/densita > vettoreCanvasSize[nG].width)	vettoreTracce[nG].pop()
 
 		if (marcatempoFinale > vettoreMin[nG][0]) vettoreMin[nG] = ricalcoloEstremi(vettoreTracce[nG],"min")
 		if (marcatempoFinale > vettoreMax[nG][0]) vettoreMax[nG] = ricalcoloEstremi(vettoreTracce[nG],"max")
 		if ( vettoreMin[nG][2] || vettoreMax[nG][2]) {
-			vettoreMedio[nG] = somma(vettoreTracce[nG])/(numeroSensori*vettoreTracce[nG].length)
+			vettoreMedio[nG] = somma(vettoreTracce[nG])/(numeroCanali*vettoreTracce[nG].length)
 			vettoreScala[nG] = 1.4*h/(vettoreMax[nG][1]-vettoreMin[nG][1])
 			vettoreMin[nG][2] = 0
 			vettoreMax[nG][2] = 0
@@ -161,13 +163,14 @@ function graph(content,densita,numeroGrafici) {
 	} 
 
 //	disegno tracce
-	for (var nS=1; nS<numeroSensori+1; nS++) {
+	for (var nS=1; nS<numeroCanali+1; nS++) {
 		for (var nG in vettoreTracce) {
-			vettoreContext[nG].strokeStyle=coloriSensori[nS-1]
+			vettoreContext[nG].strokeStyle=coloreCanali[nS-1]
 
 			vettoreContext[nG].beginPath()
 			for (var punto of vettoreTracce[nG]) {
-				vettoreContext[nG].lineTo((marcatempoFinale-punto[0])/densita,h-(punto[nS]-vettoreMedio[nG])*vettoreScala[nG])
+				// per dispetto, una coordinata viaggia al contrario
+				vettoreContext[nG].lineTo(w*(direzioneCanali[nS-1]=="dx")+segno(direzioneCanali[nS-1]=="dx")*(marcatempoFinale-punto[0])/densita,h-(punto[nS]-vettoreMedio[nG])*vettoreScala[nG])
 			}
 			vettoreContext[nG].stroke()
 		}

@@ -1,14 +1,19 @@
-html,body {overflow:hidden}
+html,body {
+	overflow:hidden;
+	margin 0 auto;
+	text-aling:center;
+}
 
 #container{
-	position: absolute;
+	position: relative;
+	height:600px;
 	width:100%;
-	top:54px;
+	top:102px;
 	left:0px;
 	right:0px;
 	bottom:60px;
 	z-index:0;
-	/*border:solid 1px blue;*/
+	/*border:solid 1px grey;*/
 }
 
 canvas {
@@ -17,18 +22,23 @@ canvas {
 }
 
 #menu {
-	position:static;
+	position:relative;
 	top:0;
 	height:auto;
+	margin-right:90%;
 }
 
 html>body #areaDiLavoro{
-	position: static;
-	top:25px;
+	position: absolute;
+	top:0px;
+	top:0px;
 	padding:0;
 	height:90%;
 	z-index:1;
 	overflow:auto;
+	left:10%;
+	right:0%;
+	border:solid 1px pink;
 }
 
 #header{
@@ -36,8 +46,9 @@ html>body #areaDiLavoro{
 	top: 0;
 	right: 0;
 	left: 0;
-	height: 60px;
+	height: 90px;
 	z-index: 1;
+	border:solid 1px lime;
 }
 
 #footer {
