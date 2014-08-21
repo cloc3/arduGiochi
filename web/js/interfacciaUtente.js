@@ -69,3 +69,20 @@ var controlloNumeroGrafici = function(el) {
 	for (var indice in opzioni) creaLista(sottoElenco,opzioni[indice],"grafici")
 	el.appendChild(sottoElenco)
 }
+
+var start_e_stop = function(el) {
+	if (el.childElementCount!=0) return // controllo necessario per evitare gli effetti di bubbling, dovuti alla presenza di due onmouseover annidati 
+	if (fermaAcquisizione) {
+		fermaAcquisizione=false
+		el.innerHTML="Stop"
+		avvio()
+		document.getElementById("tendinaGrafici").style.display="none"
+		document.getElementById("tendinaDirezioni").style.display="none"
+	}
+	else {
+		fermaAcquisizione=true
+		el.innerHTML="Start"
+		document.getElementById("tendinaGrafici").style.display="block"
+		document.getElementById("tendinaDirezioni").style.display="block"
+	}
+}

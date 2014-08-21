@@ -20,7 +20,7 @@
 	</script>
 </head>
 
-<body id="corpo" onload="avvio()">
+<body id="corpo">
 	<header id="header">
 		<h1>Pulsazione di tre condensatori</h1>
 		<img src="img/apriletuefinestre.jpg">
@@ -28,10 +28,13 @@
 
 <section id="container">
 	<nav id="menu">
-<ul id="tendinaDirezioni" class="menuSuperiore">
+<ul id="sezioneAvvio" class="menuSuperiore">
+  <li class="menu" id="start_stop" title="" onclick="start_e_stop(this)">Avvio</li>
+</ul>
+<ul id="tendinaDirezioni" class="menuSuperiore" style="display:none">
   <li class="menu" id="cambiaDirezione" title="" onmouseover="creaListaDirezioni(this)">cambiaDirezione</li>
 </ul>
-<ul id="tendinaGrafici" class="menuSuperiore">
+<ul id="tendinaGrafici" class="menuSuperiore" style="display:none">
   <li class="menu" id="numeroGrafici" onmouseover="controlloNumeroGrafici(this)">numero grafici</li>
 </ul>
 </nav>

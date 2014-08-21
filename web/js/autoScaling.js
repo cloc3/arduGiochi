@@ -96,6 +96,7 @@ function gestioneGrafici(densita) {
 }
 
 function graph(content,densita) {
+	if (fermaAcquisizione) return
 
 	var numeroGrafici_=numeroGrafici
 // acquisizione dei dati e aggiornamento del vettore vettoreEventi.
