@@ -1,0 +1,67 @@
+//restituisce al client l'header della richiesta ricevuta, seguita dalla stampa delle coppie chiave valore eventualmente incluse nell'url.
+//testare da primaRiga di comando con:
+//for i in 1 2 3; do echo; GET http://arduino:8000/?falsoParametro=78\&falsoPar2=614\&falsoPar3=57\&falsoPar4=79\&n=4\&falsoPar6=43 ;done
+
+#include <Ethernet.h>
+#include <http.h>
+#include <evento.h>
+EthernetServer server(8000);
+
+void setup() {
+	byte mac[] = {
+		0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+	IPAddress ip(172,16,1,111);
+
+	Serial.begin(115200);
+  Ethernet.begin(mac, ip);
+  server.begin();
+/*
+  Serial.print("\nserver is at ");
+  Serial.println(Ethernet.localIP());
+*/
+	pinMode(ALIMENTAZIONE, OUTPUT);
+	digitalWrite(ALIMENTAZIONE,LOW);
+}
+
+void loop() {
+	struct parametriGet *pGet;
+	struct stringa *header;
+	struct stringa *primaRiga;
+	struct cercaChiave *comando;
+	struct evento *misura;
+
+	if (Serial.available()) {
+		primaRiga = eventoSeriale();
+		pGet = cercaParametri(primaRiga->stringa, primaRiga->l, 'I');
+		comando = cercaComando(pGet, 'n');
+		if (comando->trovato) {
+			for (int n=0; n< pGet->indice->numero; n++) {
+				misura = treCondensatori();
+				Serial.print(misura->str);
+				delay(RITARDO);
+			}
+		}
+	}
+
+	EthernetClient client = server.available();
+	if (client) {
+		//Serial.println("new client");
+		header = letturaHeader(client);
+
+		primaRiga = getline(header->stringa,header->l);
+		pGet = cercaParametri(primaRiga->stringa, primaRiga->l-10, 'I');
+		comando = cercaComando(pGet, 'n');
+
+	if (comando->trovato) {
+		for (int n=0; n< comando->nome->numero; n++) {
+			misura = treCondensatori();
+			Serial.print(misura->str);
+			client.print(misura->str);
+			delay(RITARDO);
+		}
+}
+		delay(1);
+		client.stop();
+		//Serial.println("client disconnected");
+	}
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <script type="text/javascript" src="js/scripts.js"></script>
+  <script type="text/javascript" src="js/ajaxPippo.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/stile.css">
+  <link rel="stylesheet" type="text/css" href="css/layout.css">
+  <link rel="stylesheet" type="text/css" href="css/menu.css">
+  <title>adxl345</title>
+	<script type="application/javascript">
+	prova = function(contenuto) {
+		document.getElementById("commento").innerHTML="dici che arriverà qualcosa?"
+		document.getElementById("testo").innerHTML=contenuto
+		//ajaxGet("http://arduino:8000?n=4",prova);
+	}
+	function evento() {
+		ajaxGet("http://arduino:8000?n=4",prova);
+		document.getElementById("testo").innerHTML="richiesta inoltrata"
+	}
+	</script>
+</head>
+
+<body id="corpo">
+	<header id="header">
+		<h1>Pippo</h1>
+		<img src="img/apriletuefinestre.jpg">
+	</header>
+
+<section id="container">
+<div id="areaDiLavoro" style="display:block">
+	<p onclick="evento()" style="font-size:xx-large">cliccami</p>
+	<p id="testo" style="font-size:x-large"></p>
+	<p id="commento" style="font-size:small"></p>
+</div>
+</section>
+
+	<footer id="footer">
+		<p>
+			<br>
+  		<a href="http://jigsaw.w3.org/css-validator/check/referer">
+				<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" alt="validazione CSS">
+			</a>
+  		<a href="http://validator.w3.orgi/check/referer" target="_blank">
+				<img src="http://www.w3.org/Icons/valid-html401" alt="validazione HTML">
+			</a>
+  		<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">
+				<img src="img/licenza.png" alt="licenza CC">
+			</a>
+			<br>
+  		Attribuzione-Condividi allo stesso modo 4.0
+		</p>
+  
+	</footer>
+
+
+</body>
+</html>

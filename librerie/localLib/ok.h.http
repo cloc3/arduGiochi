@@ -1,0 +1,19 @@
+#include <Arduino.h>
+#include <Ethernet.h>
+int letturaHeader(EthernetClient, char*, int );
+int getline(char*, char*, int);
+
+#define MAXWORD 30 // attenzione a non eccedere la memoria di arduino!!!
+struct coppieChVal {
+	char chiave[MAXWORD];
+	char valore[MAXWORD];
+};
+#define MAXPARAMETRI 5
+
+struct parametriGet {
+	coppieChVal *catasta;
+	coppieChVal *indice;
+	int l;
+};
+
+parametriGet *cercaParametri(char*, int);

@@ -1,0 +1,74 @@
+//restituisce al client l'header della richiesta ricevuta, seguita dalla stampa delle coppie chiave valore eventualmente incluse nell'url.
+// testare da linea di comando con:
+// GET http://arduino:8000/?primoParametro=78\&secondoParametro=654\&terzoParametro=56
+
+#include <Ethernet.h>
+#include <http.h>
+EthernetServer server(8000);
+
+void setup() {
+	byte mac[] = {
+		0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+	IPAddress ip(172,16,1,111);
+
+	Serial.begin(115200);
+  Ethernet.begin(mac, ip);
+  server.begin();
+  Serial.print("\nserver is at ");
+  Serial.println(Ethernet.localIP());
+}
+
+void loop() {
+	struct parametriGet *pGet;
+	struct httpHeader *header;
+	struct outString *linea;
+
+	EthernetClient client = server.available();
+	if (client) {
+		Serial.println("new client");
+		header = letturaHeader(client);
+
+		client.print("HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nAccess-Control-Allow-Origin: *\r\nKeep-Alive: timeout=0, max=100\r\nConnection: keep-alive\r\n\r\n");	
+		Serial.print(header->testo);
+		client.print(header->testo);
+		Serial.print("lunghezza header = ");
+		client.print("lunghezza header = ");
+		Serial.println(header->l);
+		client.println(header->l);
+
+		client.print("----\n");
+	
+		linea = getline(header->testo,header->l);
+		Serial.print("prima linea = ");
+		client.print("prima linea = ");
+		Serial.print(linea->stringa);
+		client.print(linea->stringa);
+		client.print("lunghezza prima linea = ");
+		Serial.println(linea->l);
+		client.println(linea->l);
+
+		pGet = cercaParametri(linea->stringa, linea->l-10, 'I');
+		Serial.print("numeroParametriTrovati = ");
+		client.print("numeroParametriTrovati = ");
+		Serial.println(pGet->l + 1);
+		client.println(pGet->l + 1);
+
+		while ( --pGet->indice >= pGet->catasta ) {
+			Serial.print("chiave = ");
+			Serial.println(pGet->indice->chiave);
+			Serial.print("valore = ");
+			Serial.println(pGet->indice->valore);
+			Serial.print("numero = ");
+			Serial.println(pGet->indice->numero);
+			client.print("chiave = ");
+			client.println(pGet->indice->chiave);
+			client.print("valore = ");
+			client.println(pGet->indice->valore);
+			client.print("numero = ");
+			client.println(pGet->indice->numero);
+		}
+		delay(1);
+		client.stop();
+		Serial.println("client disconnected");
+	}
+}

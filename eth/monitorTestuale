@@ -1,0 +1,54 @@
+/*
+	Skecth di studio per il controllo di due condensatori atraverso la porta seriale.
+*/
+
+//#include <letturaIntero.h>
+
+#define ALIMENTAZIONE 13
+#define CR1 1
+#define CR0 0
+#define CR2 2
+#define INGRESSO 3
+
+#define RITARDO 5
+
+int cr2=0;
+int cr1=0;
+int cr0=0;
+int alimentazione=0;
+unsigned long marcatempo;
+
+char* stato;
+char str[512];
+
+void setup()
+{
+	pinMode(ALIMENTAZIONE, OUTPUT);
+	Serial.begin(115200);
+	digitalWrite(ALIMENTAZIONE,LOW);
+	delay(10000);
+	cr2=analogRead(CR2);
+	cr1=analogRead(CR1);
+	cr0=analogRead(CR0);
+	sprintf(str,"INIZIALLIZZAZIONE, cr0 = %d, cr1 = %d,cr2 = %d\n",cr0,cr1,cr2);
+	Serial.print(str);
+}
+
+void loop()
+{
+	marcatempo=micros();
+	cr2=analogRead(CR2);
+	cr1=analogRead(CR1);
+	cr0=analogRead(CR0);
+	alimentazione=analogRead(INGRESSO);
+	if ( cr2 > 550 ) {
+		stato="scarica";
+		digitalWrite(ALIMENTAZIONE,LOW);
+	} else if ( cr2 < 450) {
+		stato="carica";
+		digitalWrite(ALIMENTAZIONE,HIGH);
+	}
+	sprintf(str,"%s, cron = %lu, cr0 = %d, cr1 = %d, cr2 = %d\n",stato,marcatempo,cr0,cr1,cr2);
+	Serial.print(str);
+	delay(RITARDO);
+}

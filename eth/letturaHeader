@@ -1,0 +1,64 @@
+//restituisce al client l'header ricevuto
+
+#include <Ethernet.h>
+
+byte mac[] = {
+	0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+IPAddress ip(192,168,0,111);
+EthernetServer server(8000);
+
+#define MAXLINE 500
+char	header[MAXLINE];
+char	*s=header;
+char	*p=header;
+int		c;
+int		lim=MAXLINE;
+
+/*
+int getline(EthernetClient client,char *s, int lim) {
+	char *t;
+	t=s;
+	int c;
+	while (--lim>0 && (c = client.read()) != EOF && c != '\n') *s++ = c;
+	if (c == '\n') *s++ = '\n';
+	*s='\0';
+	return s-t;
+}
+*/
+
+int letturaHeader( EthernetClient client, char *p, int lim) {
+	char c;
+	char *s; s=p;
+	if (client) {
+		Serial.println("new client");
+		while (client.connected()) {
+			if (client.available()) {
+				if (--lim>0 && (c = client.read()) != EOF) {
+					*p++ = c;
+					*p='\0';
+					if ( *(p-3) == (c = *(p-1)) && c == '\n') {
+						return p-s;
+					}
+				}
+			}
+		}
+	}
+}
+
+void setup() {
+	Serial.begin(115200);
+  Ethernet.begin(mac, ip);
+  server.begin();
+  Serial.print("server is at ");
+  Serial.println(Ethernet.localIP());
+}
+
+void loop() {
+	EthernetClient client = server.available();
+	letturaHeader( client, header,lim);
+	client.print("HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nAccess-Control-Allow-Origin: *\r\nKeep-Alive: timeout=0, max=100\r\nConnection: keep-alive\r\n\r\n");	
+	client.print(header);
+	delay(1);
+	client.stop();
+	Serial.println("client disconnected");
+}

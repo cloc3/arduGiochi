@@ -1,0 +1,60 @@
+#include <Arduino.h>
+#include <Ethernet.h>
+#include <http.h>
+struct coppieChVal catasta[MAXPARAMETRI];
+struct parametriGet _pGet, *pGet = &_pGet;
+
+
+int getline(char *inputString, char *outputString, int lim) {
+	char c;
+	char *p;
+	p=outputString;
+	while (--lim>0 && (c = *inputString++) != EOF && c != '\n') *p++ = c;
+	if (c == '\n') *p++ = '\n';
+	*p='\0';
+	return p-outputString;
+}
+
+int letturaHeader(EthernetClient client, char *p, int lim) {
+	char c;
+	char *s; s=p;
+	while (client.connected()) {
+	if (client.available()) {
+		if (--lim>0 && (c = client.read()) != EOF) {
+			*p++ = c;
+			*p='\0';
+			if ( *(p-3) == (c = *(p-1)) && c == '\n') {
+				return p-s;
+			}
+		}
+	}
+	}
+}
+
+parametriGet *cercaParametri(char *s, int lim) {
+	pGet->indice = catasta;
+	pGet->catasta = catasta;
+	char	c;
+	char	*ps; //puntatore di stringa
+	char	*pk; //puntatore della catasta
+	ps = s;
+	while (--lim>0 && (c = *ps++) != '\n' && c!= '?'); 
+	while (lim>0) {
+		pk = pGet->indice->chiave;
+		if (pGet->indice - catasta < MAXPARAMETRI) {
+			while (--lim>0 && (c = *ps++) != '\n' && c!= '=') *(pk++) = c;
+			*pk='\0';
+			if (pk > pGet->indice->chiave) {
+				pk=pGet->indice->valore; 
+				while (--lim>0 && (c = *ps++) != '\n' && c!= '&') *pk++ = c; 
+				*pk='\0';
+			}
+			pGet->indice++;
+			continue;
+		}
+		pGet->l = pGet->indice - catasta ;
+		return pGet;
+	}
+	pGet->l = pGet->indice - pGet->catasta ;
+	return pGet;
+}
