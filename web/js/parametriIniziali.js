@@ -1,4 +1,4 @@
-numeroGrafici = 2
+numeroGrafici = 1
 var numeroOrdinate
 
 fermaAcquisizione=true

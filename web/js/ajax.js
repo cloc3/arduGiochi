@@ -43,5 +43,6 @@ function ajaxGet(url,handler){
     var ajax_req = CreateXmlHttpReq(myhandler);
     a[a.lenght] = ajax_req
     ajax_req.open("GET",url);
+		ajax_req.setRequestHeader("Content-Type","text/plain");
     ajax_req.send(null);
 }

@@ -53,6 +53,13 @@ void loop() {
 		comando = cercaComando(pGet, 'n');
 
 	if (comando->trovato) {
+		client.println("HTTP/1.1 200 OK");
+		client.println("Content-Type: text/plain");
+		client.println("Access-Control-Allow-Origin: *");
+		//client.println("Connection: close");
+		client.println("");
+
+		client.print("\n"); //compatibilità con l'output seriale
 		for (int n=0; n< comando->nome->numero; n++) {
 			misura = treCondensatori();
 			Serial.print(misura->str);

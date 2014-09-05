@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define ALIMENTAZIONE 13
+#define ALIMENTAZIONE 12
 #define CR1 1
 #define CR0 0
 #define CR2 2
